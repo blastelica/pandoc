@@ -1,0 +1,27 @@
+name: Convert Markdown to PDF
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Setup Pandoc
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
+    - name: Combine Markdown Files
+      run: |
+        cat "old notes stari notes"/*.md > combined.md
+    - name: Convert to PDF
+      run: |
+        pandoc combined.md -o combined.pdf
+    - name: Upload PDF as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: combined-pdf
+        path: ./combined.pdf
